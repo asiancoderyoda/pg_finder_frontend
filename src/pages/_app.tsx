@@ -12,7 +12,11 @@ interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }
 
-const App = ({ Component, pageProps, emotionCache = clientSideEmotionCache }: MyAppProps) => {
+const App = ({
+  Component,
+  pageProps,
+  emotionCache = clientSideEmotionCache,
+}: MyAppProps) => {
   return (
     <React.StrictMode>
       <CacheProvider value={emotionCache}>

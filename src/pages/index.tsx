@@ -1,3 +1,4 @@
+import React from 'react';
 import { Button, Container, Box, Theme } from '@mui/material';
 import { createStyles, makeStyles } from '@mui/styles';
 import type { NextPage } from 'next';
@@ -12,16 +13,22 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       justifyContent: 'center',
       height: '100vh',
-    }
+    },
   })
 );
 
 const Home: NextPage = () => {
   const classes = useStyles();
   return (
-    <Container>
-      
-    </Container>
+    <React.Fragment>
+      <Container>
+        <Box className={classes.root}>
+          <Button disableElevation color="primary" variant="contained">
+            Click Me
+          </Button>
+        </Box>
+      </Container>
+    </React.Fragment>
   );
 };
 
