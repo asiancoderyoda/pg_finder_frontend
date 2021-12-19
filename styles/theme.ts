@@ -1,6 +1,7 @@
 import { ThemeOptions } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import createCache from '@emotion/cache';
+import facepaint from 'facepaint';
 
 export default function createEmotionCache() {
   return createCache({ key: 'css' });
@@ -45,5 +46,10 @@ export const fontOptions = {
     bolder: 600,
   },
 };
+
+const breakpoints = [576, 768, 992, 1200];
+export const mq = facepaint(
+  breakpoints.map((bp) => `@media (min-width: ${bp}px)`)
+);
 
 export const theme = createTheme(options);

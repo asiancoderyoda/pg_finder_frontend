@@ -1,29 +1,31 @@
 /** @jsxRuntime classic /
 /* @jsx jsx */
 import { css, jsx } from '@emotion/react';
-import { Box, Button, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { GetServerSidePropsContext } from 'next';
 import React from 'react';
+import { mq, theme } from '../../styles/theme';
+import SignUpForm from '../components/registerComponent';
 
-const buttonStyle = css({
-  height: '100vH',
-  width: '100vW',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-});
+const pageStyle = css(
+  mq({
+    height: '100vH',
+    width: '100%',
+    display: 'flex',
+    justifyContent: ['center', 'center', 'flex-start', 'flex-start'],
+    alignItems: 'center',
+    padding: ['auto 6px', 'auto 12px', 'auto 180px', 'auto 180px'],
+    backgroundImage: 'linear-gradient(to left, #e9f5db, #F5F7FA)',
+  })
+);
 
 interface Props {}
 
 const Register: React.FC<Props> = ({}) => {
   return (
     <React.Fragment>
-      <Box css={buttonStyle}>
-        <Typography variant="h4">Welcome to the server!</Typography>
-        <Button type="button" variant="contained" color="primary">
-          Server Rendered Button
-        </Button>
+      <Box padding="200px" css={pageStyle}>
+        <SignUpForm />
       </Box>
     </React.Fragment>
   );
