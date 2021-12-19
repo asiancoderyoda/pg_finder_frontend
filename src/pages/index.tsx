@@ -3,7 +3,6 @@ import { Button, Container, Box, Theme } from '@mui/material';
 import { createStyles, makeStyles } from '@mui/styles';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

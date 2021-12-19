@@ -9,15 +9,15 @@ export default function createEmotionCache() {
 const options: ThemeOptions = {
   palette: {
     primary: {
-      dark: '#4C8BF5',
-      light: '#4C8BF5',
-      main: '#4C8BF5',
+      dark: '#006464',
+      light: '#39a58b',
+      main: '#4eb29a',
       contrastText: '#ffffff',
     },
     secondary: {
-      dark: '#4285F4',
-      light: '#4285F4',
-      main: '#4285F4',
+      dark: '#cfe1b9',
+      light: '#dcebca',
+      main: '#e9f5db',
     },
     background: {
       default: '#F5F7FA',
