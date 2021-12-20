@@ -21,6 +21,7 @@ const cardStyle = css({
   borderRadius: '8px',
   padding: '20px 16px 10px 16px',
   boxShadow: '0px 0px 10px -1px #006464',
+  backgroundColor: theme.palette.background.default,
 });
 
 const buttonStyle = css({
