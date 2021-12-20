@@ -10,12 +10,13 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { css, jsx, useTheme } from '@emotion/react';
+import { css, jsx } from '@emotion/react';
 import { Formik, Form } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';
 import { Email, Lock } from '@mui/icons-material';
 import { theme } from '../../styles/theme';
+import FormInput from './common/FormInput';
 
 const cardStyle = css({
   borderRadius: '8px',
@@ -29,12 +30,6 @@ const buttonStyle = css({
   minWidth: '320px',
   borderRadius: '2px',
   border: 'none',
-});
-
-const inputStyle = css({
-  margin: '0 0 10px 0',
-  minWidth: '320px',
-  backgroundColor: '#fff',
 });
 
 const linkStyle = css({
@@ -71,49 +66,23 @@ const SignUpForm = () => {
         >
           {({ isSubmitting, errors, handleChange, values }) => (
             <Form id="loginform">
-              <FormControl>
-                <TextField
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="Email address"
-                  value={values.email}
-                  onChange={handleChange}
-                  css={inputStyle}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <Email />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-                <FormHelperText id="email-helper-text">
-                  {errors.email}
-                </FormHelperText>
-              </FormControl>
+              <FormInput
+                name="email"
+                label="Email address"
+                value={values.email}
+                onChange={handleChange}
+                minWidth="320px"
+                adornment={<Email />}
+              />
               <br />
-              <FormControl>
-                <TextField
-                  id="password"
-                  name="password"
-                  type="password"
-                  placeholder="Password"
-                  value={values.password}
-                  onChange={handleChange}
-                  css={inputStyle}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <Lock />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-                <FormHelperText id="password-helper-text">
-                  {errors.password}
-                </FormHelperText>
-              </FormControl>
+              <FormInput
+                name="password"
+                label="Password"
+                value={values.password}
+                onChange={handleChange}
+                minWidth="320px"
+                adornment={<Lock />}
+              />
               <br />
               <FormControl>
                 <Button
