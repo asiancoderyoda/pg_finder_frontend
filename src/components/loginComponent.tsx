@@ -11,12 +11,17 @@ import {
   Typography,
 } from '@mui/material';
 import { css, jsx } from '@emotion/react';
-import { Formik, Form } from 'formik';
+import { Formik, Form, FormikHelpers } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';
 import { Email, Lock } from '@mui/icons-material';
 import { theme } from '../../styles/theme';
 import FormInput from './common/FormInput';
+
+interface FormData {
+  email: string;
+  password: string;
+}
 
 const cardStyle = css({
   borderRadius: '8px',
@@ -30,11 +35,18 @@ const buttonStyle = css({
   minWidth: '320px',
   borderRadius: '2px',
   border: 'none',
+  '@media (max-width: 340px)': {
+    minWidth: '240px',
+  },
 });
 
 const linkStyle = css({
   color: theme.palette.primary.main,
   cursor: 'pointer',
+  ':hover': {
+    color: darken(theme.palette.primary.main, 0.2),
+    textDecoration: 'underline',
+  },
 });
 
 const loginSchema = Yup.object().shape({
@@ -46,23 +58,33 @@ const loginSchema = Yup.object().shape({
     .required('Password is required'),
 });
 
-const SignUpForm = () => {
+const onSubmit = (
+  values: FormData,
+  { setSubmitting, setValues }: FormikHelpers<FormData>
+) => {
+  setTimeout(() => {
+    alert(JSON.stringify(values, null, 2));
+    setValues({
+      email: '',
+      password: '',
+    });
+    setSubmitting(false);
+  }, 400);
+};
+
+const LoginForm = () => {
   return (
     <React.Fragment>
       <Box css={cardStyle}>
+        <Box marginBottom="12px" paddingLeft="6px">
+          <Typography component="h2" fontWeight="bold">
+            PG FINDER
+          </Typography>
+        </Box>
         <Formik
           initialValues={{ email: '', password: '' }}
           validationSchema={loginSchema}
-          onSubmit={(values, { setSubmitting, setValues }) => {
-            setTimeout(() => {
-              alert(JSON.stringify(values, null, 2));
-              setValues({
-                email: '',
-                password: '',
-              });
-              setSubmitting(false);
-            }, 400);
-          }}
+          onSubmit={onSubmit}
         >
           {({ isSubmitting, errors, handleChange, values }) => (
             <Form id="loginform">
@@ -94,16 +116,16 @@ const SignUpForm = () => {
                   css={buttonStyle}
                   disabled={isSubmitting}
                 >
-                  Sign Up
+                  Login
                 </Button>
               </FormControl>
             </Form>
           )}
         </Formik>
         <Typography component="a" variant="subtitle2">
-          Already signed up?{' '}
+          Yet to register?{' '}
           <span css={linkStyle} onClick={() => {}}>
-            Login here
+            Register here
           </span>
         </Typography>
       </Box>
@@ -111,4 +133,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default LoginForm;
