@@ -1,15 +1,7 @@
 /** @jsxRuntime classic /
 /* @jsx jsx */
-import {
-  Box,
-  Button,
-  darken,
-  FormControl,
-  FormHelperText,
-  InputAdornment,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Box, darken, FormControl, Typography } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { css, jsx } from '@emotion/react';
 import { Formik, Form, FormikHelpers } from 'formik';
 import React from 'react';
@@ -17,11 +9,7 @@ import * as Yup from 'yup';
 import { Email, Lock } from '@mui/icons-material';
 import { theme } from '../../styles/theme';
 import FormInput from './common/FormInput';
-
-interface FormData {
-  email: string;
-  password: string;
-}
+import { LoginFormData } from '../pages/login';
 
 const cardStyle = css({
   borderRadius: '8px',
@@ -49,30 +37,30 @@ const linkStyle = css({
   },
 });
 
-const loginSchema = Yup.object().shape({
-  email: Yup.string()
-    .email('Enter a valid email')
-    .required('Email is required'),
-  password: Yup.string()
-    .min(8, 'Password should be of minimum 8 characters length')
-    .required('Password is required'),
-});
+interface Props {
+  onSubmit: (
+    values: LoginFormData,
+    formikHelpers: FormikHelpers<LoginFormData>
+  ) => void;
+}
 
-const onSubmit = (
-  values: FormData,
-  { setSubmitting, setValues }: FormikHelpers<FormData>
-) => {
-  setTimeout(() => {
-    alert(JSON.stringify(values, null, 2));
-    setValues({
-      email: '',
-      password: '',
-    });
-    setSubmitting(false);
-  }, 400);
-};
+const LoginForm: React.FC<Props> = ({ onSubmit }) => {
+  const loginSchema = Yup.object().shape({
+    email: Yup.string()
+      .email('Enter a valid email')
+      .required('Email is required'),
+    password: Yup.string()
+      .min(8, 'Password should be of minimum 8 characters length')
+      .required('Password is required'),
+  });
 
-const LoginForm = () => {
+  const initLogin = (
+    values: LoginFormData,
+    formikHelpers: FormikHelpers<LoginFormData>
+  ) => {
+    onSubmit(values, formikHelpers);
+  };
+
   return (
     <React.Fragment>
       <Box css={cardStyle}>
@@ -84,7 +72,7 @@ const LoginForm = () => {
         <Formik
           initialValues={{ email: '', password: '' }}
           validationSchema={loginSchema}
-          onSubmit={onSubmit}
+          onSubmit={initLogin}
         >
           {({ isSubmitting, errors, handleChange, values }) => (
             <Form id="loginform">
@@ -107,17 +95,17 @@ const LoginForm = () => {
               />
               <br />
               <FormControl>
-                <Button
+                <LoadingButton
                   form="loginform"
                   disableElevation
                   variant="contained"
                   color="primary"
                   type="submit"
                   css={buttonStyle}
-                  disabled={isSubmitting}
+                  loading={isSubmitting}
                 >
                   Login
-                </Button>
+                </LoadingButton>
               </FormControl>
             </Form>
           )}

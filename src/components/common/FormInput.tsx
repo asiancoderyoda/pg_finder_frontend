@@ -36,6 +36,7 @@ const FormInput: React.FC<InputProps> = (props) => {
 
   return (
     <FormControl>
+      {error && <FormHelperText id="email-helper-text">{error}</FormHelperText>}
       <TextField
         {...field}
         type={field.name}
@@ -50,7 +51,6 @@ const FormInput: React.FC<InputProps> = (props) => {
           ),
         }}
       />
-      {error && <FormHelperText id="email-helper-text">{error}</FormHelperText>}
     </FormControl>
   );
 };

@@ -2,9 +2,10 @@
 /* @jsx jsx */
 import { css, jsx } from '@emotion/react';
 import { Box } from '@mui/material';
+import { FormikHelpers } from 'formik';
 import { GetServerSidePropsContext } from 'next';
 import React from 'react';
-import { mq, theme } from '../../styles/theme';
+import { mq } from '../../styles/theme';
 import LoginForm from '../components/loginComponent';
 
 const imgUrl =
@@ -24,13 +25,36 @@ const pageStyle = css(
   })
 );
 
+export interface LoginFormData {
+  email: string;
+  password: string;
+}
+
 interface Props {}
 
 const Login: React.FC<Props> = ({}) => {
+  const initLogin = (
+    values: LoginFormData,
+    formikHelpers: FormikHelpers<LoginFormData>
+  ) => {
+    setTimeout(() => {
+      alert(JSON.stringify(values, null, 2));
+      formikHelpers.setValues({
+        email: '',
+        password: '',
+      });
+      formikHelpers.setSubmitting(false);
+    }, 400);
+  };
+
   return (
     <React.Fragment>
       <Box css={pageStyle}>
-        <LoginForm />
+        <LoginForm
+          onSubmit={(...props) => {
+            initLogin(...props);
+          }}
+        />
       </Box>
     </React.Fragment>
   );
