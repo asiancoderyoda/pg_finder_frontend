@@ -1,22 +1,15 @@
 /** @jsxRuntime classic /
 /* @jsx jsx */
-import {
-  Box,
-  Button,
-  darken,
-  FormControl,
-  FormHelperText,
-  InputAdornment,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Box, darken, FormControl, Typography } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { css, jsx } from '@emotion/react';
-import { Formik, Form } from 'formik';
+import { Formik, Form, FormikHelpers } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';
 import { Email, Lock } from '@mui/icons-material';
 import { theme } from '../../styles/theme';
 import FormInput from './common/FormInput';
+import { LoginFormData } from '../pages/login';
 
 const cardStyle = css({
   borderRadius: '8px',
@@ -30,39 +23,56 @@ const buttonStyle = css({
   minWidth: '320px',
   borderRadius: '2px',
   border: 'none',
+  '@media (max-width: 340px)': {
+    minWidth: '240px',
+  },
 });
 
 const linkStyle = css({
   color: theme.palette.primary.main,
   cursor: 'pointer',
+  ':hover': {
+    color: darken(theme.palette.primary.main, 0.2),
+    textDecoration: 'underline',
+  },
 });
 
-const loginSchema = Yup.object().shape({
-  email: Yup.string()
-    .email('Enter a valid email')
-    .required('Email is required'),
-  password: Yup.string()
-    .min(8, 'Password should be of minimum 8 characters length')
-    .required('Password is required'),
-});
+interface Props {
+  onSubmit: (
+    values: LoginFormData,
+    formikHelpers: FormikHelpers<LoginFormData>
+  ) => void;
+}
 
-const SignUpForm = () => {
+const LoginForm: React.FC<Props> = ({ onSubmit }) => {
+  const loginSchema = Yup.object().shape({
+    email: Yup.string()
+      .email('Enter a valid email')
+      .required('Email is required'),
+    password: Yup.string()
+      .min(8, 'Password should be of minimum 8 characters length')
+      .required('Password is required'),
+  });
+
+  const initLogin = (
+    values: LoginFormData,
+    formikHelpers: FormikHelpers<LoginFormData>
+  ) => {
+    onSubmit(values, formikHelpers);
+  };
+
   return (
     <React.Fragment>
       <Box css={cardStyle}>
+        <Box marginBottom="12px" paddingLeft="6px">
+          <Typography component="h2" fontWeight="bold">
+            PG FINDER
+          </Typography>
+        </Box>
         <Formik
           initialValues={{ email: '', password: '' }}
           validationSchema={loginSchema}
-          onSubmit={(values, { setSubmitting, setValues }) => {
-            setTimeout(() => {
-              alert(JSON.stringify(values, null, 2));
-              setValues({
-                email: '',
-                password: '',
-              });
-              setSubmitting(false);
-            }, 400);
-          }}
+          onSubmit={initLogin}
         >
           {({ isSubmitting, errors, handleChange, values }) => (
             <Form id="loginform">
@@ -85,25 +95,25 @@ const SignUpForm = () => {
               />
               <br />
               <FormControl>
-                <Button
+                <LoadingButton
                   form="loginform"
                   disableElevation
                   variant="contained"
                   color="primary"
                   type="submit"
                   css={buttonStyle}
-                  disabled={isSubmitting}
+                  loading={isSubmitting}
                 >
-                  Sign Up
-                </Button>
+                  Login
+                </LoadingButton>
               </FormControl>
             </Form>
           )}
         </Formik>
         <Typography component="a" variant="subtitle2">
-          Already signed up?{' '}
+          Yet to register?{' '}
           <span css={linkStyle} onClick={() => {}}>
-            Login here
+            Register here
           </span>
         </Typography>
       </Box>
@@ -111,4 +121,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default LoginForm;

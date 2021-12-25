@@ -29,10 +29,14 @@ const FormInput: React.FC<InputProps> = (props) => {
     margin: '0 0 10px 0',
     minWidth: props.minWidth,
     backgroundColor: '#fff',
+    '@media (max-width: 340px)': {
+      minWidth: '240px',
+    },
   });
 
   return (
     <FormControl>
+      {error && <FormHelperText id="email-helper-text">{error}</FormHelperText>}
       <TextField
         {...field}
         type={field.name}
@@ -47,7 +51,6 @@ const FormInput: React.FC<InputProps> = (props) => {
           ),
         }}
       />
-      {error && <FormHelperText id="email-helper-text">{error}</FormHelperText>}
     </FormControl>
   );
 };
