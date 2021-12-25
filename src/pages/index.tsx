@@ -9,8 +9,13 @@ const Home: NextPage = () => {
   useEffect(() => {
     router.push('/login');
   }, []);
+
   return (
     <React.Fragment>
+      <Head>
+        <title>PG Finder Homepage</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <LinearProgress />
     </React.Fragment>
   );

@@ -5,6 +5,8 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import createEmotionCache, { theme } from '../../styles/theme';
 import { CacheProvider, EmotionCache } from '@emotion/react';
+import { Provider } from 'urql';
+import { client } from '../configs/bootstrapGql';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -20,16 +22,21 @@ const App = ({
 }: MyAppProps) => {
   return (
     <React.StrictMode>
-      <CacheProvider value={emotionCache}>
-        <Head>
-          <title>PG Finder</title>
-          <meta name="viewport" content="initial-scale=1, width=device-width" />
-        </Head>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </CacheProvider>
+      <Provider value={client}>
+        <CacheProvider value={emotionCache}>
+          <Head>
+            <title>PG Finder</title>
+            <meta
+              name="viewport"
+              content="initial-scale=1, width=device-width"
+            />
+          </Head>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Component {...pageProps} />
+          </ThemeProvider>
+        </CacheProvider>
+      </Provider>
     </React.StrictMode>
   );
 };

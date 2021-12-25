@@ -4,8 +4,11 @@ import { css, jsx } from '@emotion/react';
 import { Box } from '@mui/material';
 import { FormikHelpers } from 'formik';
 import { GetServerSidePropsContext } from 'next';
+import Head from 'next/head';
 import React from 'react';
+import { useMutation, useQuery } from 'urql';
 import { mq } from '../../styles/theme';
+import { LOGIN } from '../api/auth';
 import LoginForm from '../components/loginComponent';
 
 const imgUrl =
@@ -33,22 +36,30 @@ export interface LoginFormData {
 interface Props {}
 
 const Login: React.FC<Props> = ({}) => {
-  const initLogin = (
+  const [, callLogin] = useMutation(LOGIN);
+
+  const initLogin = async (
     values: LoginFormData,
     formikHelpers: FormikHelpers<LoginFormData>
   ) => {
-    setTimeout(() => {
-      alert(JSON.stringify(values, null, 2));
-      formikHelpers.setValues({
-        email: '',
-        password: '',
-      });
-      formikHelpers.setSubmitting(false);
-    }, 400);
+    const variables = {
+      email: values.email,
+      password: values.password,
+    };
+    const { data } = await callLogin(variables);
+    formikHelpers.setValues({
+      email: '',
+      password: '',
+    });
+    formikHelpers.setSubmitting(false);
   };
 
   return (
     <React.Fragment>
+      <Head>
+        <title>PG Finder Login</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <Box css={pageStyle}>
         <LoginForm
           onSubmit={(...props) => {
