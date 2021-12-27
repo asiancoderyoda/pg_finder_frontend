@@ -6,10 +6,10 @@ import { css, jsx } from '@emotion/react';
 import { Formik, Form, FormikHelpers } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';
-import { Email, Lock } from '@mui/icons-material';
+import { Email, Lock, Person } from '@mui/icons-material';
 import { theme } from '../../styles/theme';
 import FormInput from './common/FormInput';
-import { LoginFormData } from '../pages/login';
+import { RegisterFormData } from '../pages/register';
 import { useRouter } from 'next/router';
 
 const cardStyle = css({
@@ -40,14 +40,17 @@ const linkStyle = css({
 
 interface Props {
   onSubmit: (
-    values: LoginFormData,
-    formikHelpers: FormikHelpers<LoginFormData>
+    values: RegisterFormData,
+    formikHelpers: FormikHelpers<RegisterFormData>
   ) => void;
 }
 
-const LoginForm: React.FC<Props> = ({ onSubmit }) => {
+const RegisterForm: React.FC<Props> = ({ onSubmit }) => {
   const router = useRouter();
-  const loginSchema = Yup.object().shape({
+  const registerSchema = Yup.object().shape({
+    name: Yup.string()
+      .min(2, 'Name should be of minimum 2 characters length')
+      .required('Password is required'),
     email: Yup.string()
       .email('Enter a valid email')
       .required('Email is required'),
@@ -56,9 +59,9 @@ const LoginForm: React.FC<Props> = ({ onSubmit }) => {
       .required('Password is required'),
   });
 
-  const initLogin = (
-    values: LoginFormData,
-    formikHelpers: FormikHelpers<LoginFormData>
+  const initRegister = (
+    values: RegisterFormData,
+    formikHelpers: FormikHelpers<RegisterFormData>
   ) => {
     onSubmit(values, formikHelpers);
   };
@@ -72,12 +75,22 @@ const LoginForm: React.FC<Props> = ({ onSubmit }) => {
           </Typography>
         </Box>
         <Formik
-          initialValues={{ email: '', password: '' }}
-          validationSchema={loginSchema}
-          onSubmit={initLogin}
+          initialValues={{ name: '', email: '', password: '' }}
+          validationSchema={registerSchema}
+          onSubmit={initRegister}
         >
           {({ isSubmitting, errors, handleChange, values }) => (
-            <Form id="loginform">
+            <Form id="registerform">
+              <FormInput
+                name="name"
+                label="Full Name"
+                type="text"
+                value={values.name}
+                onChange={handleChange}
+                minWidth="320px"
+                adornment={<Person />}
+              />
+              <br />
               <FormInput
                 name="email"
                 label="Email address"
@@ -100,7 +113,7 @@ const LoginForm: React.FC<Props> = ({ onSubmit }) => {
               <br />
               <FormControl>
                 <LoadingButton
-                  form="loginform"
+                  form="registerform"
                   disableElevation
                   variant="contained"
                   color="primary"
@@ -108,21 +121,21 @@ const LoginForm: React.FC<Props> = ({ onSubmit }) => {
                   css={buttonStyle}
                   loading={isSubmitting}
                 >
-                  Login
+                  Register
                 </LoadingButton>
               </FormControl>
             </Form>
           )}
         </Formik>
         <Typography component="a" variant="subtitle2">
-          Yet to register?{' '}
+          Already registered?{' '}
           <span
             css={linkStyle}
             onClick={() => {
-              router.push('/register');
+              router.push('/login');
             }}
           >
-            Register here
+            Login here
           </span>
         </Typography>
       </Box>
@@ -130,4 +143,4 @@ const LoginForm: React.FC<Props> = ({ onSubmit }) => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;

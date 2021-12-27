@@ -1,6 +1,5 @@
-export const LOGIN = `
 mutation Login($email: String!, $password: String!) {
-  login(options: {email: $email, password: $password}) {
+  login(options: { email: $email, password: $password }) {
     code
     errors {
       field
@@ -17,11 +16,11 @@ mutation Login($email: String!, $password: String!) {
     refreshToken
   }
 }
-`;
 
-export const REGISTER = `
 mutation Register($userName: String!, $email: String!, $password: String!) {
-  register(options: {userName: $userName, email: $email, password: $password}) {
+  register(
+    options: { userName: $userName, email: $email, password: $password }
+  ) {
     code
     errors {
       field
@@ -36,4 +35,3 @@ mutation Register($userName: String!, $email: String!, $password: String!) {
     }
   }
 }
-`;

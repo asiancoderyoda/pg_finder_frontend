@@ -6,9 +6,10 @@ import { FormikHelpers } from 'formik';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import React from 'react';
+import { useMutation } from 'urql';
 import { mq } from '../../styles/theme';
-import LoginForm from '../components/loginComponent';
-import { useLoginMutation } from '../generated/graphql';
+import RegisterForm from '../components/registerComponent';
+import { useRegisterMutation } from '../generated/graphql';
 import { FieldErrorParser } from '../util/fieldErrorParser';
 
 const imgUrl =
@@ -28,30 +29,37 @@ const pageStyle = css(
   })
 );
 
-export interface LoginFormData {
+export interface RegisterFormData {
+  name: string;
   email: string;
   password: string;
 }
 
 interface Props {}
 
-const Login: React.FC<Props> = ({}) => {
-  const [, callLogin] = useLoginMutation();
+const Register: React.FC<Props> = ({}) => {
+  const [, callRegister] = useRegisterMutation();
 
-  const initLogin = async (
-    values: LoginFormData,
-    formikHelpers: FormikHelpers<LoginFormData>
+  const initRegister = async (
+    values: RegisterFormData,
+    formikHelpers: FormikHelpers<RegisterFormData>
   ) => {
     try {
       const variables = {
+        userName: values.name,
         email: values.email,
         password: values.password,
       };
-      const response = await callLogin(variables);
-      if (response.data?.login.errors) {
-        formikHelpers.setErrors(FieldErrorParser(response.data.login.errors));
+      const response = await callRegister(variables);
+      if (response.data?.register.errors) {
+        const fieldErrors = FieldErrorParser(response.data.register.errors);
+        formikHelpers.setErrors({
+          ...fieldErrors,
+          name: fieldErrors.userName,
+        });
       } else {
         formikHelpers.setValues({
+          name: '',
           email: '',
           password: '',
         });
@@ -63,13 +71,13 @@ const Login: React.FC<Props> = ({}) => {
   return (
     <React.Fragment>
       <Head>
-        <title>PG Finder Login</title>
+        <title>PG Finder Register</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <Box css={pageStyle}>
-        <LoginForm
+        <RegisterForm
           onSubmit={(...props) => {
-            initLogin(...props);
+            initRegister(...props);
           }}
         />
       </Box>
@@ -83,4 +91,4 @@ export const getServerSideProps = (ctx: GetServerSidePropsContext) => {
   };
 };
 
-export default Login;
+export default Register;
