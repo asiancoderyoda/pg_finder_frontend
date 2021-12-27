@@ -6,7 +6,7 @@ import { css, jsx } from '@emotion/react';
 import { Formik, Form, FormikHelpers } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';
-import { Email, Lock, PersonOutline } from '@mui/icons-material';
+import { Email, Lock, Person } from '@mui/icons-material';
 import { theme } from '../../styles/theme';
 import FormInput from './common/FormInput';
 import { RegisterFormData } from '../pages/register';
@@ -88,7 +88,7 @@ const RegisterForm: React.FC<Props> = ({ onSubmit }) => {
                 value={values.name}
                 onChange={handleChange}
                 minWidth="320px"
-                adornment={<PersonOutline />}
+                adornment={<Person />}
               />
               <br />
               <FormInput

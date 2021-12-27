@@ -8,8 +8,9 @@ import Head from 'next/head';
 import React from 'react';
 import { useMutation } from 'urql';
 import { mq } from '../../styles/theme';
-import { REGISTER } from '../api/auth';
 import RegisterForm from '../components/registerComponent';
+import { useRegisterMutation } from '../generated/graphql';
+import { FieldErrorParser } from '../util/fieldErrorParser';
 
 const imgUrl =
   'https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/pf-lukestackpoole4-shibuya-crossing-eye-02.jpg?w=800&dpr=1&fit=default&crop=default&q=65&vib=3&con=3&usm=15&bg=F4F4F3&ixlib=js-2.2.1&s=ffd4eca7f7c40958d02cbd0ba41cb332';
@@ -37,24 +38,34 @@ export interface RegisterFormData {
 interface Props {}
 
 const Register: React.FC<Props> = ({}) => {
-  const [, callRegister] = useMutation(REGISTER);
+  const [, callRegister] = useRegisterMutation();
 
   const initRegister = async (
     values: RegisterFormData,
     formikHelpers: FormikHelpers<RegisterFormData>
   ) => {
-    const variables = {
-      userName: values.name,
-      email: values.email,
-      password: values.password,
-    };
-    const { data } = await callRegister(variables);
-    formikHelpers.setValues({
-      name: '',
-      email: '',
-      password: '',
-    });
-    formikHelpers.setSubmitting(false);
+    try {
+      const variables = {
+        userName: values.name,
+        email: values.email,
+        password: values.password,
+      };
+      const response = await callRegister(variables);
+      if (response.data?.register.errors) {
+        const fieldErrors = FieldErrorParser(response.data.register.errors);
+        formikHelpers.setErrors({
+          ...fieldErrors,
+          name: fieldErrors.userName,
+        });
+      } else {
+        formikHelpers.setValues({
+          name: '',
+          email: '',
+          password: '',
+        });
+      }
+      formikHelpers.setSubmitting(false);
+    } catch (error) {}
   };
 
   return (

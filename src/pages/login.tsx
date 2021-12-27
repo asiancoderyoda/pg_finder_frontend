@@ -6,10 +6,10 @@ import { FormikHelpers } from 'formik';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import React from 'react';
-import { useMutation } from 'urql';
 import { mq } from '../../styles/theme';
-import { LOGIN } from '../api/auth';
 import LoginForm from '../components/loginComponent';
+import { useLoginMutation } from '../generated/graphql';
+import { FieldErrorParser } from '../util/fieldErrorParser';
 
 const imgUrl =
   'https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/pf-lukestackpoole4-shibuya-crossing-eye-02.jpg?w=800&dpr=1&fit=default&crop=default&q=65&vib=3&con=3&usm=15&bg=F4F4F3&ixlib=js-2.2.1&s=ffd4eca7f7c40958d02cbd0ba41cb332';
@@ -36,22 +36,28 @@ export interface LoginFormData {
 interface Props {}
 
 const Login: React.FC<Props> = ({}) => {
-  const [, callLogin] = useMutation(LOGIN);
+  const [, callLogin] = useLoginMutation();
 
   const initLogin = async (
     values: LoginFormData,
     formikHelpers: FormikHelpers<LoginFormData>
   ) => {
-    const variables = {
-      email: values.email,
-      password: values.password,
-    };
-    const { data } = await callLogin(variables);
-    formikHelpers.setValues({
-      email: '',
-      password: '',
-    });
-    formikHelpers.setSubmitting(false);
+    try {
+      const variables = {
+        email: values.email,
+        password: values.password,
+      };
+      const response = await callLogin(variables);
+      if (response.data?.login.errors) {
+        formikHelpers.setErrors(FieldErrorParser(response.data.login.errors));
+      } else {
+        formikHelpers.setValues({
+          email: '',
+          password: '',
+        });
+      }
+      formikHelpers.setSubmitting(false);
+    } catch (error) {}
   };
 
   return (
