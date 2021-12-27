@@ -18,3 +18,22 @@ mutation Login($email: String!, $password: String!) {
   }
 }
 `;
+
+export const REGISTER = `
+mutation Register($userName: String!, $email: String!, $password: String!) {
+  register(options: {userName: $userName, email: $email, password: $password}) {
+    code
+    errors {
+      field
+      message
+    }
+    user {
+      id
+      userName
+      email
+      createdAt
+      updatedAt
+    }
+  }
+}
+`;

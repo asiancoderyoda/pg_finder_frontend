@@ -39,7 +39,7 @@ const FormInput: React.FC<InputProps> = (props) => {
       {error && <FormHelperText id="email-helper-text">{error}</FormHelperText>}
       <TextField
         {...field}
-        type={field.name}
+        type={props.type}
         id={field.name}
         name={field.name}
         placeholder={props.label}

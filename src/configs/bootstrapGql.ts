@@ -6,6 +6,7 @@ export const client = createClient({
     const token = '';
     return {
       headers: { authorization: token ? `Bearer ${token}` : '' },
+      credentials: 'include',
     };
   },
 });

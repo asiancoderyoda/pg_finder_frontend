@@ -8,8 +8,8 @@ import Head from 'next/head';
 import React from 'react';
 import { useMutation } from 'urql';
 import { mq } from '../../styles/theme';
-import { LOGIN } from '../api/auth';
-import LoginForm from '../components/loginComponent';
+import { REGISTER } from '../api/auth';
+import RegisterForm from '../components/registerComponent';
 
 const imgUrl =
   'https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/pf-lukestackpoole4-shibuya-crossing-eye-02.jpg?w=800&dpr=1&fit=default&crop=default&q=65&vib=3&con=3&usm=15&bg=F4F4F3&ixlib=js-2.2.1&s=ffd4eca7f7c40958d02cbd0ba41cb332';
@@ -28,26 +28,29 @@ const pageStyle = css(
   })
 );
 
-export interface LoginFormData {
+export interface RegisterFormData {
+  name: string;
   email: string;
   password: string;
 }
 
 interface Props {}
 
-const Login: React.FC<Props> = ({}) => {
-  const [, callLogin] = useMutation(LOGIN);
+const Register: React.FC<Props> = ({}) => {
+  const [, callRegister] = useMutation(REGISTER);
 
-  const initLogin = async (
-    values: LoginFormData,
-    formikHelpers: FormikHelpers<LoginFormData>
+  const initRegister = async (
+    values: RegisterFormData,
+    formikHelpers: FormikHelpers<RegisterFormData>
   ) => {
     const variables = {
+      userName: values.name,
       email: values.email,
       password: values.password,
     };
-    const { data } = await callLogin(variables);
+    const { data } = await callRegister(variables);
     formikHelpers.setValues({
+      name: '',
       email: '',
       password: '',
     });
@@ -57,13 +60,13 @@ const Login: React.FC<Props> = ({}) => {
   return (
     <React.Fragment>
       <Head>
-        <title>PG Finder Login</title>
+        <title>PG Finder Register</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <Box css={pageStyle}>
-        <LoginForm
+        <RegisterForm
           onSubmit={(...props) => {
-            initLogin(...props);
+            initRegister(...props);
           }}
         />
       </Box>
@@ -77,4 +80,4 @@ export const getServerSideProps = (ctx: GetServerSidePropsContext) => {
   };
 };
 
-export default Login;
+export default Register;
