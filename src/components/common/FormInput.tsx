@@ -10,10 +10,6 @@ import ErrorIcon from '@mui/icons-material/Error';
 import { css, jsx } from '@emotion/react';
 import React, { InputHTMLAttributes, ReactElement } from 'react';
 import { useField } from 'formik';
-import { padding } from '@mui/system';
-
-// Test Main Branch commit
-// Test Dev Branch commit
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   name: string;
