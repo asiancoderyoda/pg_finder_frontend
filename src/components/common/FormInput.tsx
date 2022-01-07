@@ -4,13 +4,13 @@ import {
   FormControl,
   FormHelperText,
   InputAdornment,
-  SvgIconTypeMap,
   TextField,
 } from '@mui/material';
+import ErrorIcon from '@mui/icons-material/Error';
 import { css, jsx } from '@emotion/react';
-import { OverridableComponent } from '@mui/material/OverridableComponent';
 import React, { InputHTMLAttributes, ReactElement } from 'react';
 import { useField } from 'formik';
+import { padding } from '@mui/system';
 
 // Test Main Branch commit
 // Test Dev Branch commit
@@ -34,9 +34,22 @@ const FormInput: React.FC<InputProps> = (props) => {
     },
   });
 
+  const errorStyle = css({
+    color: 'red',
+    display: 'flex',
+    alignItems: 'center',
+    marginLeft: '2px',
+    marginBottom: '8px',
+  });
+
   return (
     <FormControl>
-      {error && <FormHelperText id="email-helper-text">{error}</FormHelperText>}
+      {error && (
+        <FormHelperText css={errorStyle} id="helper-text">
+          <ErrorIcon fontSize="small" />
+          {error}
+        </FormHelperText>
+      )}
       <TextField
         {...field}
         type={props.type}

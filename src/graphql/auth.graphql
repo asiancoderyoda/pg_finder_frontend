@@ -1,5 +1,5 @@
-mutation Login($email: String!, $password: String!) {
-  login(options: { email: $email, password: $password }) {
+mutation Login($options: LoginInput!) {
+  login(options: $options) {
     code
     errors {
       field
@@ -17,10 +17,8 @@ mutation Login($email: String!, $password: String!) {
   }
 }
 
-mutation Register($userName: String!, $email: String!, $password: String!) {
-  register(
-    options: { userName: $userName, email: $email, password: $password }
-  ) {
+mutation Register($options: UserNamePasswordInput!) {
+  register(options: $options) {
     code
     errors {
       field

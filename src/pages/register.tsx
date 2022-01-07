@@ -6,10 +6,12 @@ import { FormikHelpers } from 'formik';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import React from 'react';
-import { useMutation } from 'urql';
 import { mq } from '../../styles/theme';
 import RegisterForm from '../components/registerComponent';
-import { useRegisterMutation } from '../generated/graphql';
+import {
+  useRegisterMutation,
+  UserNamePasswordInput,
+} from '../generated/graphql';
 import { FieldErrorParser } from '../util/fieldErrorParser';
 
 const imgUrl =
@@ -45,12 +47,12 @@ const Register: React.FC<Props> = ({}) => {
     formikHelpers: FormikHelpers<RegisterFormData>
   ) => {
     try {
-      const variables = {
+      const variables: UserNamePasswordInput = {
         userName: values.name,
         email: values.email,
         password: values.password,
       };
-      const response = await callRegister(variables);
+      const response = await callRegister({ options: variables });
       if (response.data?.register.errors) {
         const fieldErrors = FieldErrorParser(response.data.register.errors);
         formikHelpers.setErrors({
