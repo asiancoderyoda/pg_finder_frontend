@@ -8,7 +8,7 @@ import Head from 'next/head';
 import React from 'react';
 import { mq } from '../../styles/theme';
 import LoginForm from '../components/loginComponent';
-import { useLoginMutation } from '../generated/graphql';
+import { LoginInput, useLoginMutation } from '../generated/graphql';
 import { FieldErrorParser } from '../util/fieldErrorParser';
 
 const imgUrl =
@@ -43,11 +43,11 @@ const Login: React.FC<Props> = ({}) => {
     formikHelpers: FormikHelpers<LoginFormData>
   ) => {
     try {
-      const variables = {
+      const variables: LoginInput = {
         email: values.email,
         password: values.password,
       };
-      const response = await callLogin(variables);
+      const response = await callLogin({ options: variables });
       if (response.data?.login.errors) {
         formikHelpers.setErrors(FieldErrorParser(response.data.login.errors));
       } else {
